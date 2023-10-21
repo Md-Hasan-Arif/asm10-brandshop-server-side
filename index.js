@@ -29,17 +29,38 @@ async function run() {
     await client.connect();
 
     const productCollection = client.db('productDB').collection('product')
+    const addProductCollection = client.db('SaveProductDB').collection('addedCardProduct')
+
 
     app.get('/addProduct',async (req,res)=>{
       const cursor = productCollection.find();
       const result = await cursor.toArray();
       res.send(result);
     })
+    app.get('/saveProduct',async (req,res)=>{
+      const cursor =addProductCollection.find();
+      const result = await cursor.toArray();
+      res.send(result);
+    })
+
+   app.get('/product/:brandName',async(req, res)=>{
+    const brandName=req.params.brandName;
+    const query ={BrandName:brandName}
+    const products = await productCollection.find(query).toArray();
+    res.send(products)
+     }) 
 
     app.post('/addProduct',async(req, res)=>{
       const newProduct= req.body;
       console.log(newProduct)
       const result = await productCollection.insertOne(newProduct);
+      res.send(result);
+    })
+
+    app.post('/saveProduct',async(req, res)=>{
+      const newProduct= req.body;
+      console.log(newProduct)
+      const result = await addProductCollection.insertMany(newProduct);
       res.send(result);
     })
 
