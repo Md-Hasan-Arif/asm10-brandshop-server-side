@@ -42,12 +42,7 @@ async function run() {
       const result = await cursor.toArray();
       res.send(result);
     })
-    app.get('/saveProduct/:id',async (req,res)=>{
-      const id = req.params.id;
-      const query= {_id: new ObjectId(id)}
-      const result = await addProductCollection.findOne(query)
-      res.send(result);
-      res.send(result);
+  
     })
 
    app.get('/product/:brandName',async(req, res)=>{
